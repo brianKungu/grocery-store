@@ -1,9 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    background-color:rgb(240 253 244);
 }
 
 a {
@@ -13,7 +17,10 @@ a {
 
 * {
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
+
+
 
 @media (prefers-color-scheme: dark) {
   html {
@@ -24,3 +31,7 @@ a {
     background: black;
   }
 }
+
+/* .hero{
+  opacity: 50%;
+} */
