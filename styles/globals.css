@@ -32,6 +32,6 @@ a {
   }
 }
 
-/* .hero{
-  opacity: 50%;
-} */
+.dottedContainer{
+  height:200px;
+}

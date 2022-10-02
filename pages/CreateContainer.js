@@ -3,6 +3,9 @@ import { React, useState } from "react";
 import Layout from "../components/Layout";
 import { motion } from "framer-motion";
 import data from "../utils/data";
+import Loader from "../components/Loader";
+import { AiOutlineCloudUpload,AiFillDelete } from "react-icons/ai";
+import PrimaryButton from "../components/PrimaryButton";
 
 export default function CreateContainer() {
   const [title, setTitle] = useState("");
@@ -12,6 +15,9 @@ export default function CreateContainer() {
   const [fields, setFields] = useState(false);
   const [msg, setMsg] = useState(null);
   const [alert, setAlert] = useState("danger");
+  const [isLoading, setisLoading] = useState(false);
+  const uploadImage = () => {};
+  const deleteImage = () => {}; 
   return (
     <Layout>
       <Head>
@@ -65,7 +71,43 @@ export default function CreateContainer() {
                 ))}
             </select>
           </div>
-          <div className="group flex justify-center items-center flex-col border-2 border-dotted border-green-300 w-full h-225 md:h-420 cursor-pointer rounded-md"></div>
+          <div className="dottedContainer group flex justify-center items-center flex-col border-2 border-dotted border-green-300 w-full cursor-pointer rounded-md">
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <>
+                {!imageAsset ? (
+                  <>
+                    <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
+                      <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                        <AiOutlineCloudUpload className="text-green-800 hover:text-green-500 text-3xl" />
+                        <p className="text-green-800 hover:text-green-500">
+                          Click here to upload
+                        </p>
+                      </div>
+                      <input
+                        type="file"
+                        name="uploadimage"
+                        accept="image/*"
+                        onChange={uploadImage}
+                        className="w-o h-0"
+                      />
+                    </label>
+                  </>
+                ) : (
+                  <>
+                    <div className="relative h-full">
+                      <img scr={imageAsset} alt="uploaded image" />
+                      <PrimaryButton
+                        className="absolute bottom-3 right-3"
+                        onClick={deleteImage}
+                      />
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </Layout>
