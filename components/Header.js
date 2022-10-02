@@ -9,11 +9,18 @@ import {
   AiOutlineAlignRight,
   AiOutlineClose,
   AiOutlineHome,
+  AiOutlineLogout,
 } from "react-icons/ai";
 
 import { Transition, Popover } from "@headlessui/react";
 
 const navigation = [
+  {
+    name: "New Item",
+    href: "/CreateContainer",
+    current: false,
+    icon: AiOutlinePlus,
+  },
   { name: "Home", href: "/", current: false, icon: AiOutlineHome },
   { name: "Cart", href: "#", current: false, icon: AiOutlineShoppingCart },
 ];
@@ -85,6 +92,15 @@ export default function Header() {
                       </span>
                     </a>
                   ))}
+                  <div className="flex">
+                    <AiOutlineLogout
+                      className="h-6 w-6 flex-shrink-0 hover:text-green-500 text-green-800"
+                      aria-hidden="true"
+                    />
+                    <span className="ml-3 text-base font-medium hover:text-green-500 text-green-800">
+                      Logout{" "}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

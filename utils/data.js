@@ -33,6 +33,28 @@ const data = {
       slug: "mango",
     },
   ],
+  categories: [
+    {
+      id: 1,
+      name: "Fruits",
+      slug: "fruits",
+    },
+    {
+      id: 2,
+      name: "Vegetables",
+      slug: "vegetables",
+    },
+    {
+      id: 3,
+      name: "Eggs and Dairy Products",
+      slug: "eggs and dairy products",
+    },
+    {
+      id: 4,
+      name: "Meat",
+      slug: "meat",
+    },
+  ],
 };
 
 export default data;
