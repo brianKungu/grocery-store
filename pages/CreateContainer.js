@@ -4,7 +4,7 @@ import Layout from "../components/Layout";
 import { motion } from "framer-motion";
 import data from "../utils/data";
 import Loader from "../components/Loader";
-import { AiOutlineCloudUpload,AiFillDelete } from "react-icons/ai";
+import { AiOutlineCloudUpload, AiFillDelete } from "react-icons/ai";
 import PrimaryButton from "../components/PrimaryButton";
 
 export default function CreateContainer() {
@@ -17,7 +17,8 @@ export default function CreateContainer() {
   const [alert, setAlert] = useState("danger");
   const [isLoading, setisLoading] = useState(false);
   const uploadImage = () => {};
-  const deleteImage = () => {}; 
+  const deleteImage = () => {};
+  const saveDetails = () => {};
   return (
     <Layout>
       <Head>
@@ -98,15 +99,38 @@ export default function CreateContainer() {
                   <>
                     <div className="relative h-full">
                       <img scr={imageAsset} alt="uploaded image" />
-                      <PrimaryButton
-                        className="absolute bottom-3 right-3"
+                      <button
+                        type="button"
+                        className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outiline-none hover;shadow-md duration-500 transition-all ease-in-out"
                         onClick={deleteImage}
-                      />
+                      >
+                        <AiFillDelete className="text-green-800" />
+                      </button>
                     </div>
                   </>
                 )}
               </>
             )}
+          </div>
+          <div className="w-full py-2 border-b border-green-300 flex items-center gap-2">
+            <input
+              type="text"
+              required
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="Provide a product price"
+              className="flex-1 w-full h-full text-lg bg-transparent font-semibold outline-none p-2 text-green-800 border-none placeholder:text-green-800"
+            />
+            <label className="text-sm text-green-800">Product price</label>
+          </div>
+          <div className="flex items-center w-full">
+            <button
+              type="button"
+              className="bg-emerald-500 ml-0 md:ml-auto w-full md:w-auto border-none outline-none px-12 py-2 rounded-lg text-lg text-white font-semibold"
+              onClick={saveDetails}
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>

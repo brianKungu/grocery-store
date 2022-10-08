@@ -1,7 +1,8 @@
 import { React, useState, Fragment } from "react";
 import PrimaryButton from "./PrimaryButton";
 import PrimaryBtnSmall from "./PrimaryBtnSmall";
-
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { app } from "../firebase.config";
 import Link from "next/link";
 import {
   AiOutlinePlus,
@@ -25,12 +26,17 @@ const navigation = [
   { name: "Cart", href: "#", current: false, icon: AiOutlineShoppingCart },
 ];
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const firebaseAuth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  const login = async () => {
+    const response = await signInWithPopup(firebaseAuth, provider);
+    console.log(response);
+  };
   return (
     <Popover className="sticky bg-green-50 top-0">
       <div className="mx-auto max-w-7xl px-6 md:px-2">
         <div className="flex items-center justify-between border-b-2 border-green-100 py-6 md:justify-start md:space-x-10">
-          <div className="flex justify-start lg:w-0 lg:flex-1">
+          <div className="flex justify-start lg:w-0 flex-1">
             <Link href="/" passHref>
               <a className="font-bold text-3xl text-green-800 uppercase font-sans">
                 Deli grocery
@@ -44,8 +50,13 @@ export default function Header() {
               <AiOutlineAlignRight className="text-xl" />
             </Popover.Button>
           </div>
-          <div className="hidden md:inline-flex">
-            <PrimaryButton text="Get started" />
+          <div className="hidden md:inline-flex onClick={login}">
+            <button
+              onClick={login}
+              className="bg-green-800 text-white uppercase p-4 font-bold rounded-full shadow-lg hover:bg-green-500"
+            >
+              Get started
+            </button>
           </div>
         </div>
       </div>
