@@ -18,12 +18,12 @@ import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
 
 const navigation = [
-  {
-    name: "New Item",
-    href: "/CreateContainer",
-    current: false,
-    icon: AiOutlinePlus,
-  },
+  // {
+  //   name: "New Item",
+  //   href: "/CreateContainer",
+  //   current: false,
+  //   icon: AiOutlinePlus,
+  // },
   { name: "Home", href: "/", current: false, icon: AiOutlineHome },
   { name: "Cart", href: "#", current: false, icon: AiOutlineShoppingCart },
 ];
@@ -140,6 +140,19 @@ export default function Header() {
               </div>
               <div className="mt-6">
                 <div className="grid gap-y-8">
+                  {user && user.email === "bkungu07@gmail.com" && (
+                    <Link href={"/CreateContainer"}>
+                      <a className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50">
+                        <AiOutlinePlus
+                          className="h-6 w-6 flex-shrink-0 hover:text-green-500 text-green-800"
+                          aria-hidden="true"
+                        />{" "}
+                        <span className="ml-3 text-base font-medium hover:text-green-500 text-green-800">
+                          New Item
+                        </span>
+                      </a>
+                    </Link>
+                  )}
                   {navigation.map((nav) => (
                     <a
                       key={nav.name}
