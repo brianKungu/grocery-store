@@ -14,6 +14,8 @@ import {
 } from "react-icons/ai";
 
 import { Transition, Popover } from "@headlessui/react";
+import { useStateValue } from "../context/StateProvider";
+import { actionType } from "../context/reducer";
 
 const navigation = [
   {
@@ -26,22 +28,61 @@ const navigation = [
   { name: "Cart", href: "#", current: false, icon: AiOutlineShoppingCart },
 ];
 export default function Header() {
+  const [isMenu, setIsMenu] = useState(false);
   const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
+  const [{ user }, dispatch] = useStateValue();
+
   const login = async () => {
-    const response = await signInWithPopup(firebaseAuth, provider);
-    console.log(response);
+    if (!user) {
+      const {
+        user: { refreshToken, providerData },
+      } = await signInWithPopup(firebaseAuth, provider);
+      dispatch({
+        type: actionType.SET_USER,
+        user: providerData[0],
+      });
+      localStorage.setItem("user", JSON.stringify(providerData[0]));
+    } else {
+      setIsMenu(!isMenu);
+    }
   };
   return (
     <Popover className="sticky bg-green-50 top-0">
       <div className="mx-auto max-w-7xl px-6 md:px-2">
-        <div className="flex items-center justify-between border-b-2 border-green-100 py-6 md:justify-start md:space-x-10">
-          <div className="flex justify-start lg:w-0 flex-1">
+        <div className="flex items-center justify-between border-b-2 border-green-100 py-6 md:justify-start md:space-x-10 w-full">
+          <div className="flex justify-start">
             <Link href="/" passHref>
               <a className="font-bold text-3xl text-green-800 uppercase font-sans">
                 Deli grocery
               </a>
             </Link>
+          </div>
+          <div className="hidden md:flex space-x-4 flex-1 items-center justify-center">
+            <a
+              href=""
+              className="-m-3 flex items-center rounded-md p-3 hover:bg-green-200"
+            >
+              <AiOutlineHome
+                className="h-6 w-6 flex-shrink-0 hover:text-green-500 text-green-800"
+                aria-hidden="true"
+              />
+              <span className="ml-3 text-base font-medium hover:text-green-500 text-green-800">
+                Home
+              </span>
+            </a>
+            <a
+              href=""
+              className="-m-3 flex items-center rounded-md p-3 hover:bg-green-200"
+            >
+              <AiOutlineShoppingCart
+                className="h-6 w-6 flex-shrink-0 hover:text-green-500 text-green-800"
+                aria-hidden="true"
+              />
+              <span className="ml-3 text-base font-medium hover:text-green-500 text-green-800">
+                Cart
+              </span>
+            </a>
           </div>
 
           <div className="-my-2 -mr-2 md:hidden">
@@ -50,13 +91,24 @@ export default function Header() {
               <AiOutlineAlignRight className="text-xl" />
             </Popover.Button>
           </div>
-          <div className="hidden md:inline-flex onClick={login}">
+          <div className="hidden md:inline-flex relative">
             <button
               onClick={login}
               className="bg-green-800 text-white uppercase p-4 font-bold rounded-full shadow-lg hover:bg-green-500"
             >
-              Get started
+              {user ? user.displayName : `Get Started`}
             </button>
+            {isMenu && (
+              <div className="w-40 bg-green-100 shadow-md rounded-lg flex flex-col absolute top-20 right-0">
+                {user && user.email === "bkungu07@gmail.com" && (
+                  <Link href={"/CreateContainer"}>
+                    <p className="px-4 py-2 flex items-center gap-3 cursor-pointer transition-all duration-100 ease-in-out text-base text-green-800 hover:bg-green-200 hover:text-green-500">
+                      New Item <AiOutlinePlus />
+                    </p>
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
