@@ -37,18 +37,3 @@ export default function Hero() {
   );
 }
 
-{
-  /* <div className="mx-auto">
-  <div className="flex flex-col items-center justify-center mt-20 max-w-7xl md:mt-20 lg:mt-20  xl:mt-28">
-    <div className="tracking-tight text-center lg:text-left text-white font-bold space-y-4">
-      <h1 className="md:text-6xl text-3xl">Welcome to Deli Grocery</h1>
-      <h3 className="text-4xl font-semibold">
-        Save time and leave the groceries to us.
-      </h3>
-    </div>
-    <div className="mt-8">
-      <PrimaryButton text="Shop now" />
-    </div>
-  </div>
-</div>; */
-}

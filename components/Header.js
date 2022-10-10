@@ -1,9 +1,9 @@
 import { React, useState, Fragment } from "react";
-import PrimaryButton from "./PrimaryButton";
-import PrimaryBtnSmall from "./PrimaryBtnSmall";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { app } from "../firebase.config";
 import Link from "next/link";
+import { motion } from "framer-motion";
+
 import {
   AiOutlinePlus,
   AiOutlineShoppingCart,
@@ -32,6 +32,11 @@ export default function Header() {
   const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
   const [{ user }, dispatch] = useStateValue();
+  const [count, setCount] = useState(0);
+
+  const add = () => {
+    setCount((count += 1));
+  };
 
   const login = async () => {
     if (!user) {
@@ -46,6 +51,14 @@ export default function Header() {
     } else {
       setIsMenu(!isMenu);
     }
+  };
+  const logout = () => {
+    setIsMenu(false);
+    localStorage.clear();
+    dispatch({
+      type: actionType.SET_USER,
+      user: null,
+    });
   };
   return (
     <Popover className="sticky bg-green-50 top-0">
@@ -79,10 +92,14 @@ export default function Header() {
                 className="h-6 w-6 flex-shrink-0 hover:text-green-500 text-green-800"
                 aria-hidden="true"
               />
-              <span className="ml-3 text-base font-medium hover:text-green-500 text-green-800">
+              <span className="mx-1 text-base font-medium hover:text-green-500 text-green-800">
                 Cart
               </span>
+              <span className="text-xs w-8 h-5 bg-green-200 text-green-800 rounded-md flex items-center justify-center">
+                {count}
+              </span>
             </a>
+            <button onClick={add}>click me</button>
           </div>
 
           <div className="-my-2 -mr-2 md:hidden">
@@ -99,15 +116,23 @@ export default function Header() {
               {user ? user.displayName : `Get Started`}
             </button>
             {isMenu && (
-              <div className="w-40 bg-green-100 shadow-md rounded-lg flex flex-col absolute top-20 right-0">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.6 }}
+                className="w-40 bg-green-100 shadow-md rounded-lg flex flex-col absolute top-20 right-0"
+              >
                 {user && user.email === "bkungu07@gmail.com" && (
                   <Link href={"/CreateContainer"}>
-                    <p className="px-4 py-2 flex items-center gap-3 cursor-pointer transition-all duration-100 ease-in-out text-base text-green-800 hover:bg-green-200 hover:text-green-500">
+                    <p className="font-medium px-4 py-2 flex items-center gap-3 cursor-pointer transition-all duration-100 ease-in-out text-base text-green-800 hover:bg-green-200 bg-green-100 rounded-md">
                       New Item <AiOutlinePlus />
                     </p>
                   </Link>
                 )}
-              </div>
+                <p className="font-medium px-4 py-2 flex items-center gap-3 cursor-pointer transition-all duration-100 ease-in-out text-base text-green-800 hover:bg-green-200 bg-green-100 rounded-md" onClick={logout}>
+                  Logout <AiOutlineLogout />
+                </p>
+              </motion.div>
             )}
           </div>
         </div>
@@ -142,12 +167,12 @@ export default function Header() {
                 <div className="grid gap-y-8">
                   {user && user.email === "bkungu07@gmail.com" && (
                     <Link href={"/CreateContainer"}>
-                      <a className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50">
+                      <a className="-m-3 flex items-center rounded-md p-3 hover:bg-green-200">
                         <AiOutlinePlus
-                          className="h-6 w-6 flex-shrink-0 hover:text-green-500 text-green-800"
+                          className="h-6 w-6 flex-shrink-0 text-green-800"
                           aria-hidden="true"
                         />{" "}
-                        <span className="ml-3 text-base font-medium hover:text-green-500 text-green-800">
+                        <span className="ml-3 text-base font-medium text-green-800">
                           New Item
                         </span>
                       </a>
@@ -157,23 +182,26 @@ export default function Header() {
                     <a
                       key={nav.name}
                       href={nav.href}
-                      className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
+                      className="-m-3 flex items-center rounded-md p-3 hover:bg-green-200"
                     >
                       <nav.icon
-                        className="h-6 w-6 flex-shrink-0 hover:text-green-500 text-green-800"
+                        className="h-6 w-6 flex-shrink-0  text-green-800"
                         aria-hidden="true"
                       />
-                      <span className="ml-3 text-base font-medium hover:text-green-500 text-green-800">
+                      <span className="ml-3 text-base font-medium text-green-800">
                         {nav.name}
                       </span>
                     </a>
                   ))}
-                  <div className="flex">
+                  <div className="flex bg-green-200 hover:bg-green-300 cursor-pointer py-3 px-1 rounded-md">
                     <AiOutlineLogout
-                      className="h-6 w-6 flex-shrink-0 hover:text-green-500 text-green-800"
+                      className="h-6 w-6 flex-shrink-0 text-green-800"
                       aria-hidden="true"
                     />
-                    <span className="ml-3 text-base font-medium hover:text-green-500 text-green-800">
+                    <span
+                      className="ml-3 text-base font-medium text-green-800"
+                      onClick={logout}
+                    >
                       Logout{" "}
                     </span>
                   </div>
@@ -185,13 +213,4 @@ export default function Header() {
       </Transition>
     </Popover>
   );
-}
-
-{
-  /* <Link href="/" passHref>
-            <Popover.Button className="inline-flex items-center justify-center rounded-md bg-green-50 p-2 text-green-800 hover:text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-200">
-              <span className="sr-only">Open menu</span>
-              <AiOutlineShoppingCart className="text-xl" />
-            </Popover.Button>
-          </Link> */
 }

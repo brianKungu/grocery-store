@@ -6,7 +6,13 @@ import data from "../utils/data";
 import Loader from "../components/Loader";
 import { AiOutlineCloudUpload, AiFillDelete } from "react-icons/ai";
 import PrimaryButton from "../components/PrimaryButton";
-
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { storage } from "../firebase.config";
 export default function CreateContainer() {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
@@ -16,9 +22,90 @@ export default function CreateContainer() {
   const [msg, setMsg] = useState(null);
   const [alert, setAlert] = useState("danger");
   const [isLoading, setisLoading] = useState(false);
-  const uploadImage = () => {};
-  const deleteImage = () => {};
-  const saveDetails = () => {};
+  const uploadImage = (e) => {
+    setisLoading(true);
+    // capture the image from the input
+    const imageFile = e.target.files[0];
+    console.log(imageFile);
+    const storageRef = ref(storage, `images/${Date.now()}-${imageFile.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const uploadProgress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (error) => {
+        console.log(error);
+        setFields(true);
+        setMsg("Error while uplaoding: Try again!");
+        setAlert("danger");
+        setTimeout(() => {
+          setFields(false);
+          setisLoading(false);
+        }, 4000);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImageAsset(downloadURL);
+          setisLoading(false);
+          setFields(true);
+          setMsg("Image uploaded successfully!");
+          setAlert("success");
+          setTimeout(() => {
+            setFields(false);
+          }, 4000);
+        });
+      }
+    );
+  };
+  const deleteImage = () => {
+    setisLoading(true);
+    const deleteRef = ref(storage, imageAsset);
+    deleteObject(deleteRef).then(() => {
+      setImageAsset(null);
+      setisLoading(false);
+      setFields(true);
+      setMsg("Image deleted successfully!");
+      setAlert("success");
+      setTimeout(() => {
+        setFields(false);
+      }, 4000);
+    });
+  };
+  const saveDetails = () => {
+    setisLoading(true);
+    try {
+      if (!title || !imageAsset || !category || !price) {
+        setFields(true);
+        setMsg("Kindly input all the required fields!");
+        setAlert("danger");
+        setTimeout(() => {
+          setFields(false);
+          setisLoading(false);
+        }, 4000);
+      }else{
+        const data = {
+          id: `${Date.now()}`,
+          title : title,
+          imageURL : imageAsset,
+          category: category,
+          quantity: 1,
+          price : price,
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setFields(true);
+      setMsg("Error while uplaoding: Try again!");
+      setAlert("danger");
+      setTimeout(() => {
+        setFields(false);
+        setisLoading(false);
+      }, 4000);
+    }
+  };
   return (
     <Layout>
       <Head>
@@ -98,13 +185,17 @@ export default function CreateContainer() {
                 ) : (
                   <>
                     <div className="relative h-full">
-                      <img scr={imageAsset} alt="uploaded image" />
+                      <img
+                        src={imageAsset}
+                        alt="uploaded image"
+                        className="h-full w-full object-cover"
+                      />
                       <button
                         type="button"
-                        className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl cursor-pointer outiline-none hover;shadow-md duration-500 transition-all ease-in-out"
+                        className="absolute bottom-3 right-3 p-3 rounded-full hover:bg-red-900 bg-red-300 text-xl cursor-pointer outiline-none shadow-md duration-500 transition-all ease-in-out"
                         onClick={deleteImage}
                       >
-                        <AiFillDelete className="text-green-800" />
+                        <AiFillDelete className="text-red-800 hover:text-red-300" />
                       </button>
                     </div>
                   </>
