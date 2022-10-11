@@ -13,6 +13,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { storage } from "../firebase.config";
+import { saveItem } from "../utils/firebaseFunctions";
 export default function CreateContainer() {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
@@ -85,26 +86,41 @@ export default function CreateContainer() {
           setFields(false);
           setisLoading(false);
         }, 4000);
-      }else{
+      } else {
         const data = {
           id: `${Date.now()}`,
-          title : title,
-          imageURL : imageAsset,
+          title: title,
+          imageURL: imageAsset,
           category: category,
           quantity: 1,
-          price : price,
-        }
+          price: price,
+        };
+        saveItem(data);
+        setisLoading(false);
+        setFields(true);
+        setMsg("Data uploaded successfully!");
+        setAlert("success");
+        clearData();
+        setTimeout(() => {
+          setFields(false);
+        }, 4000);
       }
     } catch (error) {
       console.log(error);
       setFields(true);
-      setMsg("Error while uplaoding: Try again!");
+      setMsg("Error while uploading: Try again!");
       setAlert("danger");
       setTimeout(() => {
         setFields(false);
         setisLoading(false);
       }, 4000);
     }
+  };
+  const clearData = () => {
+    setTitle("");
+    setImageAsset(null);
+    setCategory("Select Category");
+    setPrice("");
   };
   return (
     <Layout>
