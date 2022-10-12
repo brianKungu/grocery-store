@@ -11,6 +11,7 @@ import {
   AiOutlineClose,
   AiOutlineHome,
   AiOutlineLogout,
+  AiOutlineLogin,
 } from "react-icons/ai";
 
 import { Transition, Popover } from "@headlessui/react";
@@ -72,18 +73,17 @@ export default function Header() {
             </Link>
           </div>
           <div className="hidden md:flex space-x-4 flex-1 items-center justify-center">
-            <a
-              href=""
-              className="-m-3 flex items-center rounded-md p-3 hover:bg-green-200"
-            >
-              <AiOutlineHome
-                className="h-6 w-6 flex-shrink-0 hover:text-green-500 text-green-800"
-                aria-hidden="true"
-              />
-              <span className="ml-3 text-base font-medium hover:text-green-500 text-green-800">
-                Home
-              </span>
-            </a>
+            <Link href="/" passHref>
+              <a className="-m-3 flex items-center rounded-md p-3 hover:bg-green-200">
+                <AiOutlineHome
+                  className="h-6 w-6 flex-shrink-0 hover:text-green-500 text-green-800"
+                  aria-hidden="true"
+                />
+                <span className="ml-3 text-base font-medium hover:text-green-500 text-green-800">
+                  Home
+                </span>
+              </a>
+            </Link>
             <a
               href=""
               className="-m-3 flex items-center rounded-md p-3 hover:bg-green-200"
@@ -123,13 +123,18 @@ export default function Header() {
                 className="w-40 bg-green-100 shadow-md rounded-lg flex flex-col absolute top-20 right-0"
               >
                 {user && user.email === "bkungu07@gmail.com" && (
-                  <Link href={"/CreateContainer"}>
-                    <p className="font-medium px-4 py-2 flex items-center gap-3 cursor-pointer transition-all duration-100 ease-in-out text-base text-green-800 hover:bg-green-200 bg-green-100 rounded-md">
-                      New Item <AiOutlinePlus />
-                    </p>
-                  </Link>
+                  <div>
+                    <Link href={"/CreateContainer"}>
+                      <p className="font-medium px-4 py-2 flex items-center gap-3 cursor-pointer transition-all duration-100 ease-in-out text-base text-green-800 hover:bg-green-200 bg-green-100 rounded-md">
+                        New Item <AiOutlinePlus />
+                      </p>
+                    </Link>
+                  </div>
                 )}
-                <p className="font-medium px-4 py-2 flex items-center gap-3 cursor-pointer transition-all duration-100 ease-in-out text-base text-green-800 hover:bg-green-200 bg-green-100 rounded-md" onClick={logout}>
+                <p
+                  className="font-medium px-4 py-2 flex items-center gap-3 cursor-pointer transition-all duration-100 ease-in-out text-base text-green-800 hover:bg-green-200 bg-green-100 rounded-md"
+                  onClick={logout}
+                >
                   Logout <AiOutlineLogout />
                 </p>
               </motion.div>
@@ -193,7 +198,34 @@ export default function Header() {
                       </span>
                     </a>
                   ))}
-                  <div className="flex bg-green-200 hover:bg-green-300 cursor-pointer py-3 px-1 rounded-md">
+                  {user ? (
+                    <div className="flex bg-green-200 hover:bg-green-300 cursor-pointer py-3 px-1 rounded-md">
+                      <AiOutlineLogout
+                        className="h-6 w-6 flex-shrink-0 text-green-800"
+                        aria-hidden="true"
+                      />
+                      <span
+                        className="ml-3 text-base font-medium text-green-800"
+                        onClick={logout}
+                      >
+                        Logout{" "}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex bg-green-200 hover:bg-green-300 cursor-pointer py-3 px-1 rounded-md">
+                      <AiOutlineLogin
+                        className="h-6 w-6 flex-shrink-0 text-green-800"
+                        aria-hidden="true"
+                      />
+                      <span
+                        className="ml-3 text-base font-medium text-green-800"
+                        onClick={login}
+                      >
+                        Login{" "}
+                      </span>
+                    </div>
+                  )}
+                  {/* <div className="flex bg-green-200 hover:bg-green-300 cursor-pointer py-3 px-1 rounded-md">
                     <AiOutlineLogout
                       className="h-6 w-6 flex-shrink-0 text-green-800"
                       aria-hidden="true"
@@ -204,7 +236,7 @@ export default function Header() {
                     >
                       Logout{" "}
                     </span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

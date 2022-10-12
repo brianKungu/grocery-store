@@ -13,7 +13,8 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { storage } from "../firebase.config";
-import { saveItem } from "../utils/firebaseFunctions";
+import { getAllFoodItems, saveItem } from "../utils/firebaseFunctions";
+import { useStateValue } from "../context/StateProvider";
 export default function CreateContainer() {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
@@ -23,6 +24,7 @@ export default function CreateContainer() {
   const [msg, setMsg] = useState(null);
   const [alert, setAlert] = useState("danger");
   const [isLoading, setisLoading] = useState(false);
+  const [{ foodItems }, dispatch] = useStateValue();
   const uploadImage = (e) => {
     setisLoading(true);
     // capture the image from the input
@@ -115,12 +117,23 @@ export default function CreateContainer() {
         setisLoading(false);
       }, 4000);
     }
+    fetchData();
   };
+
   const clearData = () => {
     setTitle("");
     setImageAsset(null);
     setCategory("Select Category");
     setPrice("");
+  };
+
+  const fetchData = async () => {
+    await getAllFoodItems().then((data) => {
+      dispatch({
+        type: actionType.SET_FOOD_ITEMS,
+        foodItems: data,
+      });
+    });
   };
   return (
     <Layout>

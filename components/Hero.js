@@ -1,5 +1,6 @@
 import React from "react";
 import PrimaryButton from "./PrimaryButton";
+import { Link } from "react-scroll";
 
 export default function Hero() {
   return (
@@ -27,7 +28,9 @@ export default function Hero() {
                 </h3>
               </div>
               <div className="mt-8">
-                <PrimaryButton text="Shop now" />
+                <Link to="products" spy={true} duration={1000}>
+                  <PrimaryButton text="Shop now" />
+                </Link>
               </div>
             </div>
           </div>
@@ -36,4 +39,3 @@ export default function Hero() {
     </div>
   );
 }
-
