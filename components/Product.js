@@ -4,12 +4,12 @@ import { BsCart3 } from "react-icons/bs";
 export default function Product({ imgSrc, productName, price }) {
   return (
     <>
-      <div className="bg-green-100 rounded-md p-2 shadow-md">
+      <div className="p-2 transition duration-500 bg-green-100 rounded-md shadow-md hover:scale-105">
         <div className="overflow-hidden rounded-lg aspect-w-1 aspect-h-1 xl:aspect-w-7 xl:aspect-h-8">
           <img
             src={imgSrc}
             alt=""
-            className="object-cover object-center w-full group-hover:opacity-75"
+            className="object-cover object-center w-full h-[200px] group-hover:opacity-75"
           />
         </div>
         <div className="flex items-center">

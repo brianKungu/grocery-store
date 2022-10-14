@@ -15,6 +15,7 @@ import {
 import { storage } from "../firebase.config";
 import { getAllFoodItems, saveItem } from "../utils/firebaseFunctions";
 import { useStateValue } from "../context/StateProvider";
+import { actionType } from "../context/reducer";
 export default function CreateContainer() {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
@@ -140,7 +141,7 @@ export default function CreateContainer() {
       <Head>
         <title>Create Item</title>
       </Head>
-      <div className="w-full min-h-screen flex items-center justify-center">
+      <div className="flex items-center justify-center w-full min-h-screen">
         <div className="gap-4 w-[90%] md:w-[75%] border bg-green-100 border-green-300 rounded-md p-4 flex flex-col items-center justify-center">
           {fields && (
             <motion.p
@@ -156,14 +157,14 @@ export default function CreateContainer() {
               {msg}
             </motion.p>
           )}
-          <div className="w-full py-2 border-b border-green-300 flex items-center gap-2">
+          <div className="flex items-center w-full gap-2 py-2 border-b border-green-300">
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Provide a product title"
-              className="flex-1 w-full h-full text-lg bg-transparent font-semibold outline-none p-2 text-green-800 border-none placeholder:text-green-800"
+              className="flex-1 w-full h-full p-2 text-lg font-semibold text-green-800 bg-transparent border-none outline-none placeholder:text-green-800"
             />
             <label className="text-sm text-green-800">Product title</label>
           </div>
@@ -171,7 +172,7 @@ export default function CreateContainer() {
           <div className="w-full">
             <select
               onChange={(e) => setCategory(e.target.value)}
-              className="border font-semibold hover:text-green-800 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-300 bg-transparent outline-none w-full text-base border-green-300 rounded-md p-2"
+              className="w-full p-2 text-base font-semibold bg-transparent border border-green-300 rounded-md outline-none hover:text-green-800 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-300"
             >
               <option value="other" className="font-semibold">
                 Select Category
@@ -181,23 +182,23 @@ export default function CreateContainer() {
                   <option
                     key={category.id}
                     value={category.urlParamName}
-                    className="bg-inherit font-semibold outline-none border-none"
+                    className="font-semibold border-none outline-none bg-inherit"
                   >
                     {category.name}
                   </option>
                 ))}
             </select>
           </div>
-          <div className="dottedContainer group flex justify-center items-center flex-col border-2 border-dotted border-green-300 w-full cursor-pointer rounded-md">
+          <div className="flex flex-col items-center justify-center w-full border-2 border-green-300 border-dotted rounded-md cursor-pointer dottedContainer group">
             {isLoading ? (
               <Loader />
             ) : (
               <>
                 {!imageAsset ? (
                   <>
-                    <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
-                      <div className="w-full h-full flex flex-col items-center justify-center gap-2">
-                        <AiOutlineCloudUpload className="text-green-800 hover:text-green-500 text-3xl" />
+                    <label className="flex flex-col items-center justify-center w-full h-full cursor-pointer">
+                      <div className="flex flex-col items-center justify-center w-full h-full gap-2">
+                        <AiOutlineCloudUpload className="text-3xl text-green-800 hover:text-green-500" />
                         <p className="text-green-800 hover:text-green-500">
                           Click here to upload
                         </p>
@@ -207,7 +208,7 @@ export default function CreateContainer() {
                         name="uploadimage"
                         accept="image/*"
                         onChange={uploadImage}
-                        className="w-o h-0"
+                        className="h-0 w-o"
                       />
                     </label>
                   </>
@@ -217,11 +218,11 @@ export default function CreateContainer() {
                       <img
                         src={imageAsset}
                         alt="uploaded image"
-                        className="h-full w-full object-cover"
+                        className="object-cover w-full h-full"
                       />
                       <button
                         type="button"
-                        className="absolute bottom-3 right-3 p-3 rounded-full hover:bg-red-900 bg-red-300 text-xl cursor-pointer outiline-none shadow-md duration-500 transition-all ease-in-out"
+                        className="absolute p-3 text-xl transition-all duration-500 ease-in-out bg-red-300 rounded-full shadow-md cursor-pointer bottom-3 right-3 hover:bg-red-900 outiline-none"
                         onClick={deleteImage}
                       >
                         <AiFillDelete className="text-red-800 hover:text-red-300" />
@@ -232,21 +233,21 @@ export default function CreateContainer() {
               </>
             )}
           </div>
-          <div className="w-full py-2 border-b border-green-300 flex items-center gap-2">
+          <div className="flex items-center w-full gap-2 py-2 border-b border-green-300">
             <input
               type="text"
               required
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="Provide a product price"
-              className="flex-1 w-full h-full text-lg bg-transparent font-semibold outline-none p-2 text-green-800 border-none placeholder:text-green-800"
+              className="flex-1 w-full h-full p-2 text-lg font-semibold text-green-800 bg-transparent border-none outline-none placeholder:text-green-800"
             />
             <label className="text-sm text-green-800">Product price</label>
           </div>
           <div className="flex items-center w-full">
             <button
               type="button"
-              className="bg-emerald-500 ml-0 md:ml-auto w-full md:w-auto border-none outline-none px-12 py-2 rounded-lg text-lg text-white font-semibold"
+              className="w-full px-12 py-2 ml-0 text-lg font-semibold text-white border-none rounded-lg outline-none bg-emerald-500 md:ml-auto md:w-auto"
               onClick={saveDetails}
             >
               Save
