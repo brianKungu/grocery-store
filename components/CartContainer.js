@@ -2,12 +2,26 @@ import React from "react";
 import { BiArrowBack, BiMinus, BiPlus } from "react-icons/bi";
 import { motion } from "framer-motion";
 import { RiRefreshFill } from "react-icons/ri";
+import { useStateValue } from "../context/StateProvider";
+import { actionType } from "../context/reducer";
 export default function CartContainer() {
+  const [{ cartShow }, dispatch] = useStateValue();
+  const showCart = () => {
+    dispatch({
+      type: actionType.SET_CART_SHOW,
+      cartShow: !cartShow,
+    });
+  };
   return (
     <>
-      <div className="fixed top-0 right-0 flex flex-col h-screen bg-green-100 md:w-[375px] drop-shadow-md z-[101] w-full">
+      <motion.div
+        initial={{ opacity: 0, x: 200 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 200 }}
+        className="fixed top-0 right-0 flex flex-col h-screen bg-green-100 md:w-[375px] drop-shadow-md z-[101] w-full"
+      >
         <div className="flex items-center justify-between w-full p-4 cursor-pointer">
-          <motion.div whileTap={{ scale: 0.75 }}>
+          <motion.div whileTap={{ scale: 0.75 }} onClick={showCart}>
             <BiArrowBack className="text-3xl text-green-900 transition duration-500 hover:text-green-500 " />
           </motion.div>
           <p className="text-lg font-semibold text-green-900">Cart</p>
@@ -73,7 +87,7 @@ export default function CartContainer() {
             </motion.button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }
