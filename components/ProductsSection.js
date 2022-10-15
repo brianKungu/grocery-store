@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tabs from "./Tabs";
 import Products from "./Products";
 import { useStateValue } from "../context/StateProvider";
 import Tab from "./Tab";
 import data from "../utils/data";
+import CartContainer from "./CartContainer";
 export default function ProductsSection() {
   const [filter, setFilter] = useState("fruits");
 
-  const [{ foodItems }, dispatch] = useStateValue();
+  const [{ foodItems, cartShow }, dispatch] = useStateValue();
+  useEffect(() => {}, [cartShow]);
   return (
     <div className="w-full mx-auto my-6 max-w-7xl products">
       <div className="flex flex-col items-center justify-center">
@@ -35,6 +37,7 @@ export default function ProductsSection() {
         <div className="w-full max-w-6xl">
           <Products data={foodItems?.filter((n) => n.category == filter)} />
         </div>
+        {cartShow && <CartContainer />}
       </div>
     </div>
   );

@@ -1,6 +1,12 @@
 import Head from "next/head";
 import Image from "next/image";
-import { Footer, Header, Hero, ProductsSection } from "../components";
+import {
+  CartContainer,
+  Footer,
+  Header,
+  Hero,
+  ProductsSection,
+} from "../components";
 import styles from "../styles/Home.module.css";
 import { AnimatePresence } from "framer-motion";
 import { useStateValue } from "../context/StateProvider";
