@@ -18,32 +18,11 @@ import { Transition, Popover } from "@headlessui/react";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
 
-const navigation = [
-  // {
-  //   name: "New Item",
-  //   href: "/CreateContainer",
-  //   current: false,
-  //   icon: AiOutlinePlus,
-  // },
-  // { name: "Home", href: "/", current: false, icon: AiOutlineHome },
-  // {
-  //   name: "Cart",
-  //   href: "#",
-  //   current: false,
-  //   icon: AiOutlineShoppingCart,
-  //   onclick: "showCart",
-  // },
-];
 export default function Header() {
   const [isMenu, setIsMenu] = useState(false);
   const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
-  const [{ user, cartShow }, dispatch] = useStateValue();
-  // const [count, setCount] = useState(0);
-
-  // const add = () => {
-  //   setCount((count += 1));
-  // };
+  const [{ user, cartShow, cartItems }, dispatch] = useStateValue();
 
   const login = async () => {
     if (!user) {
@@ -108,9 +87,11 @@ export default function Header() {
               <span className="mx-1 text-base font-medium text-green-800 hover:text-green-500">
                 Cart
               </span>
-              <span className="px-4 py-1 ml-3 text-sm font-semibold text-center text-green-800 bg-green-300 rounded-md">
-                300
-              </span>
+              {cartItems && cartItems.length > 0 && (
+                <span className="px-4 py-1 ml-2 text-sm font-semibold text-center text-green-800 bg-green-300 rounded-md">
+                  {cartItems.length}
+                </span>
+              )}
             </a>
           </div>
 
@@ -230,12 +211,15 @@ export default function Header() {
                       className="flex-shrink-0 w-6 h-6 text-green-800"
                       aria-hidden="true"
                     />
+
                     <span className="ml-3 text-base font-medium text-green-800">
                       Cart
                     </span>
-                    <span className="px-4 pt-1 ml-3 text-sm font-semibold text-center text-green-800 bg-green-300 rounded-md">
-                      300
-                    </span>
+                    {cartItems && cartItems.length > 0 && (
+                      <span className="px-4 pt-1 ml-3 text-sm font-semibold text-center text-green-800 bg-green-300 rounded-md">
+                        {cartItems.length}
+                      </span>
+                    )}
                   </a>
 
                   {user ? (

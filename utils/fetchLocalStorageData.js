@@ -8,3 +8,14 @@ export const fetchUser = () => {
 
   return userInfo;
 };
+
+export const fetchCart = () => {
+  const cartInfo =
+    typeof window !== "undefined"
+      ? localStorage.getItem("cartItems") !== "undefined"
+        ? JSON.parse(localStorage.getItem("cartItems"))
+        : localStorage.clear()
+      : null;
+
+  return cartInfo ? cartInfo : [];
+};
