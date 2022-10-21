@@ -12,6 +12,8 @@ export default function CartContainer() {
       cartShow: !cartShow,
     });
   };
+
+
   return (
     <>
       <motion.div

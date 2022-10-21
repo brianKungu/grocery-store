@@ -4,19 +4,19 @@ import { useStateValue } from "../context/StateProvider";
 import { motion } from "framer-motion";
 import { actionType } from "../context/reducer";
 
-const item = [];
 export default function Product({ imgSrc, productName, price }) {
   const [items, setItems] = useState([]);
   const [{ cartItems }, dispatch] = useStateValue();
-  const addToCart = (item) => {
-    // console.log([...item]);
+  const addToCart = () => {
     dispatch({
-      type: actionType.SET_CART_ITEMS,
+      type: actionType.SET_CARTITEMS,
       cartItems: items,
     });
-
-    localStorage.setItem("cartItems").JSON.stringify(items);
+    localStorage.setItem("cartItems", JSON.stringify(items));
   };
+  useEffect(() => {
+    addToCart();
+  }, [items]);
   return (
     <>
       <div className="p-2 transition duration-500 bg-green-100 rounded-md shadow-md hover:scale-105">
@@ -35,7 +35,7 @@ export default function Product({ imgSrc, productName, price }) {
           <motion.div whileTap={{ scale: 0.75 }}>
             <BsCart3
               className="text-green-800"
-              onClick={() => setItems([...cartItems, item])}
+              onClick={() => setItems([...cartItems, items])}
             />
           </motion.div>
         </div>
