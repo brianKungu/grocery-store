@@ -5,11 +5,17 @@ import { RiRefreshFill } from "react-icons/ri";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
 import CartItem from "./CartItem";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { app } from "../firebase.config";
+
 // import emptyCart from "../images/emptyCart.svg";
 export default function CartContainer() {
   const [{ cartShow, cartItems, user }, dispatch] = useStateValue();
   const [flag, setFlag] = useState(1);
   const [total, setTotal] = useState(0);
+  const firebaseAuth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
   const showCart = () => {
     dispatch({
       type: actionType.SET_CART_SHOW,
@@ -32,6 +38,15 @@ export default function CartContainer() {
     });
 
     localStorage.setItem("cartItems", JSON.stringify([]));
+  };
+  const login = async () => {
+    const {
+      user: { refreshToken, providerData },
+    } = await signInWithPopup(firebaseAuth, provider);
+    dispatch({
+      type: actionType.SET_USER,
+      user: providerData[0],
+    });
   };
   return (
     <>
@@ -104,6 +119,7 @@ export default function CartContainer() {
                   whileTap={{ scale: 0.8 }}
                   type="button"
                   className="w-full p-2 my-2 text-lg font-semibold uppercase transition-all duration-150 ease-out rounded-full bg-gradient-to-tr from-yellow-400 to-yellow-600 text-gray-50 hover:shadow-md"
+                  onClick={login}
                 >
                   Login to check out
                 </motion.button>
