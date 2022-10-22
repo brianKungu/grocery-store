@@ -8,7 +8,8 @@ import CartItem from "./CartItem";
 // import emptyCart from "../images/emptyCart.svg";
 export default function CartContainer() {
   const [{ cartShow, cartItems, user }, dispatch] = useStateValue();
-  const [total, setTotal] = useState();
+  const [flag, setFlag] = useState(1);
+  const [total, setTotal] = useState(0);
   const showCart = () => {
     dispatch({
       type: actionType.SET_CART_SHOW,
@@ -22,7 +23,7 @@ export default function CartContainer() {
     }, 0);
     setTotal(totalPrice);
     console.log(total);
-  }, [total]);
+  }, [total, flag]);
 
   const clearCart = () => {
     dispatch({
@@ -59,7 +60,15 @@ export default function CartContainer() {
             <div className="flex flex-col gap-3 px-6 py-10 overflow-y-scroll w-fulll h-340 md:h-42 scrollbar-none">
               {/* cart item */}
               {cartItems &&
-                cartItems.map((item) => <CartItem key={item.id} item={item} />)}
+                cartItems.length > 0 &&
+                cartItems.map((item) => (
+                  <CartItem
+                    key={item.id}
+                    item={item}
+                    setFlag={setFlag}
+                    flag={flag}
+                  />
+                ))}
             </div>
 
             {/* cart total section */}

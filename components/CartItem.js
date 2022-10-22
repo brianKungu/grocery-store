@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
 
-export default function CartItem({ item }) {
+export default function CartItem({ item, setFlag, flag }) {
   const [quantity, setQuantity] = useState(item.quantity);
   const [items, setItems] = useState([]);
   const [{ cartItems }, dispatch] = useStateValue();
@@ -22,6 +22,7 @@ export default function CartItem({ item }) {
       cartItems.map((item) => {
         if (item.id === id) {
           item.quantity += 1;
+          setFlag(flag + 1);
         }
       });
       cartDispatch();
@@ -30,13 +31,15 @@ export default function CartItem({ item }) {
       if (quantity == 1) {
         // remove id from cart items is quantity is equal to 1
         // filter returns new array with all the items except the removed item
-        setItems(cartItems.filter((item) => item.id !== id));
-        cartDispatch;
+        items = cartItems.filter((item) => item.id !== id);
+        setFlag(flag + 1);
+        cartDispatch();
       } else {
         setQuantity(quantity - 1);
         cartItems.map((item) => {
           if (item.id === id) {
             item.quantity -= 1;
+            setFlag(flag + 1);
           }
         });
         cartDispatch();
