@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsCart3 } from "react-icons/bs";
+import { useStateValue } from "../context/StateProvider";
+import { motion } from "framer-motion";
+import { actionType } from "../context/reducer";
 
-export default function Product({ imgSrc, productName, price }) {
+export default function Product({ imgSrc, productName, price, onClick }) {
+  // const [items, setItems] = useState([]);
+  // const [{ cartItems }, dispatch] = useStateValue();
+
+  // const addtocart = () => {
+  //   dispatch({
+  //     type: actionType.SET_CARTITEMS,
+  //     cartItems: items,
+  //   });
+  //   localStorage.setItem("cartItems", JSON.stringify(items));
+  // };
+  // s;
+
+  // useEffect(() => {
+  //   addtocart();
+  // }, [items]);
   return (
     <>
       <div className="p-2 transition duration-500 bg-green-100 rounded-md shadow-md hover:scale-105">
@@ -17,11 +35,9 @@ export default function Product({ imgSrc, productName, price }) {
             <h3 className="font-bold">{productName}</h3>
             <h4 className="font-semibold">{`KES ${price}`}</h4>
           </div>
-          <div>
-            <div>
-              <BsCart3 className="text-green-800" />
-            </div>
-          </div>
+          <motion.div whileTap={{ scale: 0.75 }}>
+            <BsCart3 className="text-green-800" onClick={onClick} />
+          </motion.div>
         </div>
       </div>
     </>
