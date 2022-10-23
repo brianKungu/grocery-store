@@ -55,6 +55,17 @@ const data = {
       slug: "meat",
     },
   ],
+
+  phases: [
+    {
+      id: 1,
+      name: "phase 13",
+    },
+    {
+      id: 2,
+      name: "phase 10",
+    },
+  ],
 };
 
 export default data;
