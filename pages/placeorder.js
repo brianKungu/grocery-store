@@ -20,12 +20,16 @@ export default function PlaceOrder() {
                   shipping address
                 </h1>
                 <div className="flex flex-wrap gap-2 pt-4 text-sm">
-                  <p className="font-semibold">Full name:</p>{shippingAddress.fullName} |
-                  <p className="font-semibold">Phone number:</p>{shippingAddress.phoneNumber} |
-                  <p className="font-semibold">Location:</p>{shippingAddress.location} |
-                  <p className="font-semibold">Estate:</p>{shippingAddress.estate} |
-                  <p className="font-semibold">House number:</p>{shippingAddress.houseNumber}
-                  
+                  <p className="font-semibold">Full name:</p>
+                  {shippingAddress.fullName} |
+                  <p className="font-semibold">Phone number:</p>
+                  {shippingAddress.phoneNumber} |
+                  <p className="font-semibold">Location:</p>
+                  {shippingAddress.location} |
+                  <p className="font-semibold">Estate:</p>
+                  {shippingAddress.estate} |
+                  <p className="font-semibold">House number:</p>
+                  {shippingAddress.houseNumber}
                 </div>
               </div>
               <div className="py-4 border-b border-b-green-300">
@@ -38,25 +42,29 @@ export default function PlaceOrder() {
               </div>
               <div className="py-4 border-b border-b-green-300">
                 <h1 className="text-xl font-semibold uppercase">order items</h1>
-                <div className="pt-4">
-                  <table>
-                    <thead className="capitalize border-b border-b-green-300">
-                      <th>image</th>
-                      <th>name</th>
-                      <th>quantity</th>
-                      <th>price</th>
+                <div className="w-full pt-4">
+                  <table className="w-full table-auto">
+                    <thead className="capitalize bg-green-400 border-b rounded-md border-b-green-300">
+                      <tr>
+                        <th>image</th>
+                        <th>name</th>
+                        <th>quantity</th>
+                        <th>price</th>
+                      </tr>
                     </thead>
-                    <tbody className="text-lg text-center capitalize">
-                      <td>
-                        <img
-                          src="./images/product-1.jpg"
-                          alt="image product"
-                          className="object-cover object-center w-16 h-16 rounded-md"
-                        />
-                      </td>
-                      <td>tomatoes</td>
-                      <td>1</td>
-                      <td>50</td>
+                    <tbody className="items-center text-lg text-center capitalize">
+                      <tr>
+                        <th className="flex items-center justify-center">
+                          <img
+                            src="./images/product-1.jpg"
+                            alt="image product"
+                            className="object-cover object-center w-16 h-16 rounded-md"
+                          />
+                        </th>
+                        <td>tomatoes</td>
+                        <td>1</td>
+                        <td>50</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>

@@ -31,10 +31,32 @@ export default function Payment() {
           <h1 className="uppercase">Payment method</h1>
           <form
             onSubmit={submitHandler}
-            className="flex flex-col items-center justify-center w-full"
+            className="flex flex-col justify-center w-full items-left"
           >
-            <p>Radio button</p>
-            <input type="radio" />
+            <div className="my-4">
+              <div className="mt-2">
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    name="accountType"
+                    value="cash"
+                  />
+                  <span className="ml-2 font-normal">Cash</span>
+                </label>
+              </div>
+              <div>
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    name="accountType"
+                    value="mpesa"
+                  />
+                  <span className="ml-2 font-normal">Mpesa</span>
+                </label>
+              </div>
+            </div>
             <div className="flex flex-col w-full gap-2 py-4">
               <button
                 type="submit"

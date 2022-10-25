@@ -7,6 +7,7 @@ import { actionType } from "../context/reducer";
 import CartItem from "./CartItem";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { app } from "../firebase.config";
+import { useRouter } from "next/router";
 
 // import emptyCart from "../images/emptyCart.svg";
 export default function CartContainer() {
@@ -15,6 +16,7 @@ export default function CartContainer() {
   const [total, setTotal] = useState(0);
   const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
+  const router = useRouter();
 
   const showCart = () => {
     dispatch({
@@ -110,6 +112,7 @@ export default function CartContainer() {
                 <motion.button
                   whileTap={{ scale: 0.8 }}
                   type="button"
+                  onClick={() => router.push("/shipping")}
                   className="w-full p-2 my-2 text-lg font-semibold uppercase transition-all duration-150 ease-out rounded-full bg-gradient-to-tr from-yellow-400 to-yellow-600 text-gray-50 hover:shadow-md"
                 >
                   Check out
@@ -127,13 +130,13 @@ export default function CartContainer() {
             </div>
           </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-6">
+          <div className="flex flex-col items-center justify-center w-full h-full gap-6">
             <img
               src="./images/emptyCart.svg"
               alt="Your cart is empty"
-              className="w-300 text-green-800"
+              className="text-green-800 w-300"
             />
-            <p className="text-lg text-green-800 font-semibold">
+            <p className="text-lg font-semibold text-green-800">
               Add some items to your cart
             </p>
           </div>
