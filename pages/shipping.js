@@ -1,19 +1,44 @@
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../components/Layout";
 import data from "../utils/data";
 import { useForm } from "react-hook-form";
-
+import { actionType } from "../context/reducer";
+import { useStateValue } from "../context/StateProvider";
+import { Router, useRouter } from "next/router";
 export default function Shipping() {
+  const router = useRouter();
+  const [{ shippingAddress }, dispatch] = useStateValue();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
-  const submitHandler = (data) => {
-    console.log(data);
-    console.log(errors);
+  const submitHandler = ({
+    fullName,
+    phoneNumber,
+    location,
+    estate,
+    houseNumber,
+  }) => {
+    dispatch({
+      type: actionType.SET_SHIPPING_ADDRESS,
+      shippingAddress: { fullName, phoneNumber, location, estate, houseNumber },
+    });
+    console.log(shippingAddress);
+    localStorage.setItem("shippingAddress", JSON.stringify(shippingAddress));
+    router.push("/payment");
   };
+
+  // useEffect(() => {
+  //   setValue("fullName", shippingAddress.fullName);
+  //   setValue("phoneNumber", shippingAddress.phoneNumber);
+  //   setValue("location", shippingAddress.location);
+  //   setValue("estate", shippingAddress.estate);
+  //   setValue("houseNumber", shippingAddress.houseNumber);
+  // }, []);
+
   return (
     <>
       <Layout>
@@ -43,7 +68,6 @@ export default function Shipping() {
                     required: true,
                     minLength: {
                       value: 10,
-                      message: "Name too short!",
                     },
                   })}
                   aria-invalid={errors.fullName ? "true" : "false"}
@@ -55,6 +79,39 @@ export default function Shipping() {
                   <p className="text-red-500">Full name too short!</p>
                 ) : (
                   <p className="text-red-500">Kindly provide your full name!</p>
+                )
+              ) : (
+                ""
+              )}
+              <div
+                className={`${
+                  errors.phoneNumber
+                    ? "flex items-center justify-center w-full gap-2 p-2 rounded-md text-red-900 border border-red-300"
+                    : "flex items-center justify-center w-full gap-2 py-2 border-b border-green-300"
+                }`}
+              >
+                <input
+                  name="phoneNumber"
+                  type="text"
+                  placeholder="Phone Number"
+                  className="flex-1 w-full h-full p-2 text-lg font-semibold bg-transparent border-none outline-none placeholder:text-green-800"
+                  {...register("phoneNumber", {
+                    required: true,
+                    maxLength: {
+                      value: 10,
+                    },
+                  })}
+                  aria-invalid={errors.phoneNumber ? "true" : "false"}
+                />
+                <label className="text-sm">Phone Number</label>
+              </div>
+              {errors.phoneNumber ? (
+                errors.phoneNumber.type === "maxLength" ? (
+                  <p className="text-red-500">Enter a valid phone number!</p>
+                ) : (
+                  <p className="text-red-500">
+                    Kindly provide your phone number!
+                  </p>
                 )
               ) : (
                 ""

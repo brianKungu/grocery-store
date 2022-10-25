@@ -3,7 +3,7 @@ export const actionType = {
   SET_FOOD_ITEMS: "SET_FOOD_ITEMS",
   SET_CART_SHOW: "SET_CART_SHOW",
   SET_CARTITEMS: "SET_CARTITEMS",
-  // SET_CART: "SET_CART",
+  SET_SHIPPING_ADDRESS: "SET_SHIPPING_ADDRESS",
 };
 
 const reducer = (state, action) => {
@@ -33,11 +33,11 @@ const reducer = (state, action) => {
         ...state,
         cartItems: action.cartItems,
       };
-    // case actionType.SET_CART:
-    //   return {
-    //     ...state,
-    //     cart: action.cart,
-    //   };
+    case actionType.SET_SHIPPING_ADDRESS:
+      return {
+        ...state,
+        shippingAddress: action.shippingAddress,
+      };
 
     default:
       return state;
