@@ -6,9 +6,11 @@ import { useForm } from "react-hook-form";
 import { actionType } from "../context/reducer";
 import { useStateValue } from "../context/StateProvider";
 import { Router, useRouter } from "next/router";
+import Cookies from "js-cookie";
+
 export default function Shipping() {
   const router = useRouter();
-  const [{ shippingAddress }, dispatch] = useStateValue();
+  const [{ shippingAddress, user }, dispatch] = useStateValue();
   const {
     register,
     handleSubmit,
@@ -26,18 +28,25 @@ export default function Shipping() {
       type: actionType.SET_SHIPPING_ADDRESS,
       shippingAddress: { fullName, phoneNumber, location, estate, houseNumber },
     });
-    console.log(shippingAddress);
-    localStorage.setItem("shippingAddress", JSON.stringify(shippingAddress));
+    // console.log(shippingAddress);
+    Cookies.set("shippingAddress", shippingAddress);
+    // localStorage.setItem("shippingAddress", JSON.stringify(shippingAddress));
     router.push("/payment");
   };
 
-  // useEffect(() => {
-  //   setValue("fullName", shippingAddress.fullName);
-  //   setValue("phoneNumber", shippingAddress.phoneNumber);
-  //   setValue("location", shippingAddress.location);
-  //   setValue("estate", shippingAddress.estate);
-  //   setValue("houseNumber", shippingAddress.houseNumber);
-  // }, []);
+  useEffect(() => {
+    if (!user) {
+      router.push("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    setValue("fullName", shippingAddress.fullName);
+    setValue("phoneNumber", shippingAddress.phoneNumber);
+    setValue("location", shippingAddress.location);
+    setValue("estate", shippingAddress.estate);
+    setValue("houseNumber", shippingAddress.houseNumber);
+  }, []);
 
   return (
     <>

@@ -3,13 +3,15 @@ import { BiArrowBack, BiMinus, BiPlus } from "react-icons/bi";
 import { motion } from "framer-motion";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
+import Cookies from "js-cookie";
 
 export default function CartItem({ item, setFlag, flag }) {
   const [quantity, setQuantity] = useState(item.quantity);
   const [items, setItems] = useState([]);
   const [{ cartItems }, dispatch] = useStateValue();
   const cartDispatch = () => {
-    localStorage.setItem("cartItems", JSON.stringify(items));
+    Cookies.set("cartItems", items);
+    // localStorage.setItem("cartItems", JSON.stringify(items));
     dispatch({
       type: actionType.SET_CARTITEMS,
       cartItems: items,

@@ -9,4 +9,7 @@ export const initialState = {
   cartShow: false,
   cartItems: cartInfo,
   shippingAddress: {},
+  savePaymentMethod: "",
+  shippingFee: 0,
+  totalFee: 0,
 };

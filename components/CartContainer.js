@@ -11,9 +11,11 @@ import { useRouter } from "next/router";
 
 // import emptyCart from "../images/emptyCart.svg";
 export default function CartContainer() {
-  const [{ cartShow, cartItems, user }, dispatch] = useStateValue();
+  const [{ cartShow, cartItems, user, shippingFee, totalFee }, dispatch] =
+    useStateValue();
   const [flag, setFlag] = useState(1);
   const [total, setTotal] = useState(0);
+  const [shippingPrice, setshippingPrice] = useState(0);
   const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
   const router = useRouter();
@@ -25,13 +27,25 @@ export default function CartContainer() {
     });
   };
 
-  useEffect(() => {
-    let totalPrice = cartItems.reduce(function (accumulator, item) {
-      return accumulator + item.quantity * item.price;
-    }, 0);
-    setTotal(totalPrice);
-    console.log(total);
-  }, [total, flag]);
+  // useEffect(() => {
+  //   let itemsPrice = cartItems.reduce(function (accumulator, item) {
+  //     return accumulator + item.quantity * item.price;
+  //   }, 0);
+  //   let shipping = itemsPrice > 500 ? 0 : 100;
+  //   let totalPrice = shipping + itemsPrice;
+  //   setshippingPrice(shipping);
+  //   setTotal(totalPrice);
+  // }, [total, flag]);
+
+  // dispatch({
+  //   action: actionType.SET_SHIPPING_FEE,
+  //   shippingFee: shippingPrice,
+  // });
+  // dispatch({
+  //   action: actionType.SET_TOTAL_FEE,
+  //   totalPrice: totalFee,
+  // });
+  // window.alert(shippingFee);
 
   const clearCart = () => {
     dispatch({
@@ -89,31 +103,24 @@ export default function CartContainer() {
             </div>
 
             {/* cart total section */}
-            <div className="flex-1 w-full h-full gap-2 bg-green-800 rounded-t-[2rem] flex flex-col items-center justify-evenly px-8 py-4">
+            <div className="fixed bottom-0 w-full h-[200px] gap-2 bg-green-800 rounded-t-[2rem] flex flex-col items-center justify-evenly px-8 py-4">
               <div className="flex items-center justify-between w-full text-lg text-green-100">
                 <p>Sub total</p>
                 <p>
-                  {"KES"} {total}
+                  ({cartItems.reduce((a, c) => a + c.quantity, 0)} items) :{" "}
+                  {"KES: "}
+                  <span className="font-semibold">
+                    {cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
+                  </span>
                 </p>
               </div>
-              <div className="flex items-center justify-between w-full text-lg text-green-100">
-                <p>Delivery</p>
-                <p>{"KES"} 100</p>
-              </div>
-              <div className="w-full border-b border-green-600"></div>
 
-              <div className="flex items-center justify-between w-full text-xl font-semibold text-green-200">
-                <p>Total</p>
-                <p>
-                  {"KES"} {total + 100}
-                </p>
-              </div>
               {user ? (
                 <motion.button
                   whileTap={{ scale: 0.8 }}
                   type="button"
                   onClick={() => router.push("/shipping")}
-                  className="w-full p-2 my-2 text-lg font-semibold uppercase transition-all duration-150 ease-out rounded-full bg-gradient-to-tr from-yellow-400 to-yellow-600 text-gray-50 hover:shadow-md"
+                  className=" w-full p-2 my-2 text-lg font-semibold uppercase transition-all duration-150 ease-out rounded-full bg-gradient-to-tr from-yellow-400 to-yellow-600 text-gray-50 hover:shadow-md"
                 >
                   Check out
                 </motion.button>
@@ -144,4 +151,19 @@ export default function CartContainer() {
       </motion.div>
     </>
   );
+}
+{
+  /*
+              <div className="flex items-center justify-between w-full text-lg text-green-100">
+                <p>Delivery</p>
+                <p>{shippingPrice}</p>
+              </div>
+              <div className="w-full border-b border-green-600"></div>
+
+              <div className="flex items-center justify-between w-full text-xl font-semibold text-green-200">
+                <p>Total</p>
+                <p>
+                  {"KES"} {total}
+                </p>
+              </div> */
 }

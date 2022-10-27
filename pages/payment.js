@@ -1,25 +1,57 @@
+import Cookies from "js-cookie";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
+import { actionType } from "../context/reducer";
 import { useStateValue } from "../context/StateProvider";
 
 export default function Payment() {
   const [paymentMethod, setPaymentMethod] = useState();
   const router = useRouter();
-  const [{ shippingAddress }, dispatch] = useStateValue();
-  //   useEffect(() => {
-  //     if (!shippingAddress.address) {
-  //       router.push("/shipping");
-  //     } else {
-  //       setPaymentMethod("yes");
-  //       console.log(paymentMethod);
-  //     }
-  //   }, []);
+  const [{ shippingAddress, user, savePaymentMethod }, dispatch] =
+    useStateValue();
+
+  // console.log(shippingAddress);
+  useEffect(() => {
+    if (!user) {
+      router.push("/");
+    } else {
+      if (!shippingAddress) {
+        window.alert("Shipping details is required!");
+        router.push("/shipping");
+      } else {
+        setPaymentMethod(Cookies.get("paymentMethod") || "");
+      }
+    }
+  }, []);
+
   const submitHandler = (e) => {
     e.preventDefault();
-    router.push("/placeorder");
+    if (!paymentMethod) {
+      window.alert("Payment method is required!");
+    } else {
+      dispatch({
+        type: actionType.SET_PAYMENT_METHOD,
+        savePaymentMethod: paymentMethod,
+      });
+      Cookies.set("paymentMethod", savePaymentMethod);
+      router.push("/placeorder");
+    }
   };
+  useEffect(() => {
+    if (!user) {
+      router.push("/");
+    }
+
+    if (!shippingAddress) {
+      window.alert("Shipping details is required!");
+      router.push("/shipping");
+    } else {
+      setPaymentMethod(Cookies.get("paymentMethod") || "");
+    }
+  }, []);
+
   return (
     <Layout>
       <Head>
@@ -41,6 +73,7 @@ export default function Payment() {
                     className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     name="accountType"
                     value="cash"
+                    onChange={(e) => setPaymentMethod(e.target.value)}
                   />
                   <span className="ml-2 font-normal">Cash</span>
                 </label>
@@ -52,6 +85,7 @@ export default function Payment() {
                     className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                     name="accountType"
                     value="mpesa"
+                    onChange={(e) => setPaymentMethod(e.target.value)}
                   />
                   <span className="ml-2 font-normal">Mpesa</span>
                 </label>

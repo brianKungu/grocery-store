@@ -1,10 +1,39 @@
 import Head from "next/head";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { useStateValue } from "../context/StateProvider";
 
 export default function PlaceOrder() {
-  const [{ shippingAddress }, dispatch] = useStateValue();
+  const [{ shippingAddress, cartItems, user, savePaymentMethod }, dispatch] =
+    useStateValue();
+  const [shippingPrice, setshippingPrice] = useState();
+  const [total, setTotal] = useState();
+  const [itemsPrice, setitemsPrice] = useState();
+
+  const router = useRouter();
+  useEffect(() => {
+    if (!user) {
+      router.push("/");
+    } else {
+      if (!savePaymentMethod) {
+        router.push("/payment");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
+    const itemsPrize = round2(
+      cartItems.reduce((a, c) => a + c.price * c.quantity, 0)
+    );
+    let shipping = itemsPrice > 500 ? 0 : 100;
+    let totalPrice = itemsPrice + shipping;
+    setitemsPrice(itemsPrize);
+    setshippingPrice(shipping);
+    setTotal(totalPrice);
+  }, [total]);
+
   return (
     <Layout>
       <Head>
@@ -37,7 +66,7 @@ export default function PlaceOrder() {
                   payment method
                 </h1>
                 <div className="pt-4">
-                  <p>Cash</p>
+                  <p className="capitalize">{savePaymentMethod}</p>
                 </div>
               </div>
               <div className="py-4 border-b border-b-green-300">
@@ -53,25 +82,28 @@ export default function PlaceOrder() {
                       </tr>
                     </thead>
                     <tbody className="items-center text-lg text-center capitalize">
-                      <tr>
-                        <th className="flex items-center justify-center">
-                          <img
-                            src="./images/product-1.jpg"
-                            alt="image product"
-                            className="object-cover object-center w-16 h-16 rounded-md"
-                          />
-                        </th>
-                        <td>tomatoes</td>
-                        <td>1</td>
-                        <td>50</td>
-                      </tr>
+                      {cartItems &&
+                        cartItems.map((item) => (
+                          <tr key={item.id}>
+                            <th className="flex items-center justify-center">
+                              <img
+                                src={item.imageURL}
+                                alt="image product"
+                                className="object-cover object-center w-16 h-16 rounded-md"
+                              />
+                            </th>
+                            <td>{item.title}</td>
+                            <td>{item.quantity}</td>
+                            <td>{item.price}</td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-full bg-green-200 rounded-md md:cols-span-1 md:h-2/3">
+          <div className="w-full bg-green-200 rounded-md md:cols-span-1 md:h-[280px]">
             <div className="p-4">
               <div className="py-4">
                 <h1 className="text-xl font-semibold uppercase">
@@ -79,15 +111,21 @@ export default function PlaceOrder() {
                 </h1>
                 <div className="flex items-center justify-between pt-4 text-lg">
                   <p>Items</p>
-                  <p>{"KES"} 200</p>
+                  <p>
+                    {"KES"} {itemsPrice}
+                  </p>
                 </div>
                 <div className="flex items-center justify-between pt-4 text-lg">
                   <p>Shipping</p>
-                  <p>{"KES"} 100</p>
+                  <p>
+                    {"KES"} {shippingPrice}
+                  </p>
                 </div>
                 <div className="flex items-center justify-between pt-4 text-lg font-bold">
                   <p>Total:</p>
-                  <p>{"KES"} 300</p>
+                  <p>
+                    {"KES"} {total}
+                  </p>
                 </div>
               </div>
               <div className="w-full">
