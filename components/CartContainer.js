@@ -8,6 +8,7 @@ import CartItem from "./CartItem";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { app } from "../firebase.config";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 // import emptyCart from "../images/emptyCart.svg";
 export default function CartContainer() {
@@ -53,7 +54,8 @@ export default function CartContainer() {
       cartItems: [],
     });
 
-    localStorage.setItem("cartItems", JSON.stringify([]));
+    // localStorage.setItem("cartItems", JSON.stringify([]));
+    Cookies.remove("cartItems", JSON.stringify([]));
   };
   const login = async () => {
     const {

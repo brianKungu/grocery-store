@@ -7,6 +7,7 @@ export const actionType = {
   SET_PAYMENT_METHOD: "SET_PAYMENT_METHOD",
   SET_SHIPPING_FEE: "SET_SHIPPING_FEE",
   SET_TOTAL_FEE: " SET_TOTAL_FEE",
+  SET_ORDERS: "SET_ORDERS",
 };
 
 const reducer = (state, action) => {
@@ -66,6 +67,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         totalFee: action.totalFee,
+      };
+
+    case actionType.SET_ORDERS:
+      return {
+        ...state,
+        orders: action.orders,
       };
 
     // case "CART_ADD_ITEM": {

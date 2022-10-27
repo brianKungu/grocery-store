@@ -12,4 +12,5 @@ export const initialState = {
   savePaymentMethod: "",
   shippingFee: 0,
   totalFee: 0,
+  orders:{},
 };

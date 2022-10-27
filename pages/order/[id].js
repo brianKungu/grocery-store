@@ -1,13 +1,15 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import Loader from "../components/Loader";
-import { useStateValue } from "../context/StateProvider";
+import Layout from "../../components/Layout";
+import Loader from "../../components/Loader";
+import { useStateValue } from "../../context/StateProvider";
 import { motion } from "framer-motion";
-import { actionType } from "../context/reducer";
+import { actionType } from "../../context/reducer";
 import Cookies from "js-cookie";
-import { saveOrders } from "../utils/firebaseFunctions";
+import { saveOrders } from "../../utils/firebaseFunctions";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { firestore } from "../../firebase.config";
 
 // import Loader from "../components/Loader";
 
@@ -25,14 +27,24 @@ export default function PlaceOrder() {
   const [fields, setFields] = useState(false);
 
   const router = useRouter();
+  console.log(orders);
   useEffect(() => {
     if (!user) {
+      setMsg("You need to login to your account first!");
       router.push("/");
-    } else {
-      if (!savePaymentMethod) {
-        router.push("/payment");
-      }
     }
+    const fetchOrder = async () => {
+      try {
+        // dispatch({ type: "FETCH_REQUEST" });
+        const { data } = await getDocs(
+          query(collection(firestore, "orders"), orderBy("id", "desc"))
+        );
+        return items.docs.map((doc) => doc.data());
+      } catch (error) {
+        setMsg(error);
+      }
+    };
+    fetchOrder();
   }, []);
 
   useEffect(() => {
@@ -47,53 +59,48 @@ export default function PlaceOrder() {
     setTotal(totalPrice);
   }, [total]);
 
-  const placeOrderHandler = () => {
-    // setisLoading(true);
-    try {
-      const data = {
-        id: `${Date.now()}`,
-        orderItems: cartItems,
-        shippingAddress,
-        savePaymentMethod,
-        itemsPrice,
-        shippingPrice,
-        total,
-        // isPaid: { type: Boolean, required: true, default: false },
-        // isDelivered: { type: Boolean, required: true, default: false },
-        paidAt: `${Date.now()}`,
-        deliveredAt: `${Date.now()}`,
-      };
-      saveOrders(data);
-      console.log(data);
+  //   const placeOrderHandler = () => {
+  //     // setisLoading(true);
+  //     try {
+  //       const data = {
+  //         id: `${Date.now()}`,
+  //         orderItems: cartItems,
+  //         shippingAddress,
+  //         savePaymentMethod,
+  //         itemsPrice,
+  //         shippingPrice,
+  //         total,
+  //         isPaid: { type: Boolean, required: true, default: false },
+  //         isDelivered: { type: Boolean, required: true, default: false },
+  //         paidAt: `${Date.now()}`,
+  //         deliveredAt: `${Date.now()}`,
+  //       };
+  //       saveOrders(data);
+  //       console.log(data);
 
-      dispatch({
-        type: actionType.SET_ORDERS,
-        orders: data,
-      });
-      Cookies.set("orders", data);
-      Cookies.remove("cartItems");
-      router.push(`/order/${data.id}`);
-      setisLoading(false);
-      setFields(true);
-      setMsg("Order placed successfully");
-      setAlert("success");
-      dispatch({
-        type: actionType.SET_CARTITEMS,
-        cartItems: [],
-      });
-      setTimeout(() => {
-        setFields(false);
-      }, 4000);
-    } catch (error) {
-      setMsg(error);
-      // setFields(true);
-      setAlert("danger");
-      setTimeout(() => {
-        setFields(false);
-        setisLoading(false);
-      }, 4000);
-    }
-  };
+  //       Cookies.remove("cartItems");
+  //       router.push(`/order/${data.id}`);
+  //       setisLoading(false);
+  //       setFields(true);
+  //       setMsg("Order placed successfully");
+  //       setAlert("success");
+  //       dispatch({
+  //         type: actionType.SET_CARTITEMS,
+  //         cartItems: [],
+  //       });
+  //       setTimeout(() => {
+  //         setFields(false);
+  //       }, 4000);
+  //     } catch (error) {
+  //       setMsg(error);
+  //       // setFields(true);
+  //       setAlert("danger");
+  //       setTimeout(() => {
+  //         setFields(false);
+  //         setisLoading(false);
+  //       }, 4000);
+  //     }
+  //   };
 
   // const placeOrderHandler = () => {};
   return (
@@ -102,7 +109,7 @@ export default function PlaceOrder() {
         <title>Place Order</title>
       </Head>
       <main className="w-full min-h-screen px-6 py-6 mx-auto text-green-800 max-w-7xl md:px-2">
-        <h1 className="text-xl font-bold uppercase">Payment method</h1>
+        <h1 className="text-xl font-bold uppercase">Order {orders.id}</h1>
         <div>
           {fields && (
             <motion.p
@@ -160,8 +167,8 @@ export default function PlaceOrder() {
                       </tr>
                     </thead>
                     <tbody className="items-center text-lg text-center capitalize">
-                      {cartItems &&
-                        cartItems.map((item) => (
+                      {orders.orderItems &&
+                        orders.orderItems.map((item) => (
                           <tr key={item.id}>
                             <th className="flex items-center justify-center">
                               <img
@@ -190,32 +197,22 @@ export default function PlaceOrder() {
                 <div className="flex items-center justify-between pt-4 text-lg">
                   <p>Items</p>
                   <p>
-                    {"KES"} {itemsPrice}
+                    {"KES"} {orders.itemsPrice}
                   </p>
                 </div>
                 <div className="flex items-center justify-between pt-4 text-lg">
                   <p>Shipping</p>
                   <p>
-                    {"KES"} {shippingPrice}
+                    {"KES"} {orders.shippingPrice}
                   </p>
                 </div>
                 <div className="flex items-center justify-between pt-4 text-lg font-bold">
                   <p>Total:</p>
                   <p>
-                    {"KES"} {total}
+                    {"KES"} {orders.total}
                   </p>
                 </div>
               </div>
-              <div className="w-full">
-                <button
-                  type="button"
-                  className="w-full py-2 font-bold text-white uppercase bg-yellow-400 rounded-md hover:bg-yellow-500"
-                  onClick={placeOrderHandler}
-                >
-                  place order
-                </button>
-              </div>
-              {isLoading && <Loader />}
             </div>
           </div>
         </div>

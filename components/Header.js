@@ -17,12 +17,13 @@ import {
 import { Transition, Popover } from "@headlessui/react";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
+import Cookies from "js-cookie";
 
 export default function Header() {
   const [isMenu, setIsMenu] = useState(false);
   const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
-  const [{ user, cartShow, cartItems }, dispatch] = useStateValue();
+  const [{ user, cartShow, cartItems , shippingAddress}, dispatch] = useStateValue();
 
   const login = async () => {
     if (!user) {
@@ -45,6 +46,16 @@ export default function Header() {
       type: actionType.SET_USER,
       user: null,
     });
+
+    dispatch({
+      type: actionType.SET_CARTITEMS,
+      cartItems: [],
+    });
+    dispatch({
+      type: actionType.SET_SHIPPING_ADDRESS,
+      shippingAddress: {},
+    });
+
   };
 
   const showCart = () => {

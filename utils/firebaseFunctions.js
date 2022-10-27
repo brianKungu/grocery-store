@@ -17,6 +17,12 @@ export const saveItem = async (data) => {
   });
 };
 
+export const saveOrders = async (data) => {
+  await setDoc(doc(firestore, "orders", `${Date.now()}`), data, {
+    merge: true,
+  });
+};
+
 // get all food items
 export const getAllFoodItems = async () => {
   const items = await getDocs(
